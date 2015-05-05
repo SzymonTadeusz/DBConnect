@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 {
 	MySQL Mysql;
 	Mysql.ShowTables();
-
+	getchar();
 	return 0;
 //int main(void)
 }

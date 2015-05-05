@@ -49,7 +49,7 @@ MySQL::MySQL()
 void MySQL::ShowTables()
 {
 	/** Add MySQL Query */
-	mysql_query(connect, "show tables");
+	mysql_query(connect, "SELECT CONCAT_WS(' ',Imie, Nazwisko) From Osoba");
 
 	i = 0;
 
@@ -57,7 +57,9 @@ void MySQL::ShowTables()
 
 	my_ulonglong numrows = mysql_num_rows(res_set);
 
-	cout << " Tables in " << DATABASE << " database " << endl;
+	cout << "DB o nazwie: " << DATABASE  << endl;
+	cout << "Zapytanie: SELECT Imie+Nazwisko FROM Osoba zwrocilo nastepujace wyniki: " << endl;
+
 
 	while (((row = mysql_fetch_row(res_set)) != NULL))
 	{
