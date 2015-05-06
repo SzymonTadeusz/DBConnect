@@ -24,47 +24,73 @@ void MojaFunkcjaKorzystajaca_z_MySql()
 
 
 #include "SQLHead.h"
+
+void MySQL::pobierzWartosciDoLogowania()
+{
+	do{
+		cout << "Wpisz sciezke dostepu do bazy (zazwyczaj: localhost): ";
+		getline(cin, this->server);
+	} while (!cin.good());
+	do{
+		cout << "Wpisz nazwe pliku bazy (np. biblioteka): ";
+		getline(cin, this->database);
+	} while (!cin.good());
+	do{
+		cout << "Wpisz nazwe uzytkownika (np. root): ";
+		getline(cin, this->user);
+	} while (!cin.good());
+	do{
+		cout << "Wpisz haslo uzytkownika " << this->user << ": ";
+		getline(cin, this->password);
+	} while (!cin.good());
+}
+
 MySQL::MySQL()
 {
+	this->pobierzWartosciDoLogowania();
+
 	connect = mysql_init(NULL);
 	if (!connect)
 	{
 		cout << "MySQL Initialization Failed";
 	}
 
-	connect = mysql_real_connect(connect, SERVER, USER, PASSWORD, DATABASE, 0, NULL, 0);
+	connect = mysql_real_connect(connect, server.c_str(), user.c_str(), password.c_str(), database.c_str(), 0, NULL, 0);
 
 	if (connect)
 	{
-		cout << "Connection Succeeded\n";
+		cout << "\nConnection Succeeded\n";
 	}
 
 	else
 	{
-		cout << "Connection Failed\n";
+		cout << "\n!!! Connection Failed !!!\n Upewnij sie, ze usluga MySQL Server jest wlaczona i wpisano poprawne parametry\n";
 	}
 }
 
 
 void MySQL::ShowTables()
 {
-	/** Add MySQL Query */
-	mysql_query(connect, "SELECT CONCAT_WS(' ',Imie, Nazwisko) From Osoba");
+	if (connect){
+		/** Add MySQL Query */
+		mysql_query(connect, "SELECT CONCAT_WS(' ',Imie, Nazwisko) From Osoba");
 
-	i = 0;
+		i = 0;
 
-	res_set = mysql_store_result(connect);
+		res_set = mysql_store_result(connect);
 
-	my_ulonglong numrows = mysql_num_rows(res_set);
+		my_ulonglong numrows = mysql_num_rows(res_set);
+		
+		cout << "\nDB o nazwie: " << this->database << endl;
+		cout << "Zapytanie: SELECT Imie+Nazwisko FROM Osoba zwrocilo nastepujace wyniki: " << endl << endl;
 
-	cout << "DB o nazwie: " << DATABASE  << endl;
-	cout << "Zapytanie: SELECT Imie+Nazwisko FROM Osoba zwrocilo nastepujace wyniki: " << endl;
 
-
-	while (((row = mysql_fetch_row(res_set)) != NULL))
-	{
-		cout << row[i] << endl;
+		while (((row = mysql_fetch_row(res_set)) != NULL))
+		{
+			cout << row[i] << endl;
+		}
 	}
+	else cout << "\nBrak polaczenia z baza, zapytanie zostalo pominiete" << endl;
 }
 
 MySQL :: ~MySQL()

@@ -24,11 +24,8 @@ void MojaFunkcjaKorzystajaca_z_MySql();
 
 #include <iostream>
 #include <mysql.h>
+#include <sstream>
 using namespace std;
-#define SERVER "localhost"
-#define USER "root"
-#define PASSWORD "qaz123"
-#define DATABASE "Biblioteka"
 
 class MySQL
 {
@@ -39,8 +36,14 @@ protected:
 	MYSQL_ROW row;
 
 	unsigned int i;
+	string user;
+	string password;
+	string database;
+	string server;
 
 public:
+	
+	void pobierzWartosciDoLogowania();
 	/** MySQL Constructor */
 	MySQL();
 
